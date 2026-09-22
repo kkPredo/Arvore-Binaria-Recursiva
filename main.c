@@ -183,7 +183,7 @@ int main(){
         printf("4 - exibir em pré-ordem\n");
         printf("5 - exibir em ordem\n");
         printf("6 - exibir em pós-ordem\n");
-        printf("7 - remover valor"\n);     
+        printf("7 - remover valor\n");     
         printf("8 - sair\n");
         printf("escolha: ");
         scanf("%d", &opcao);
