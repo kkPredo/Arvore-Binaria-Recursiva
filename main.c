@@ -79,9 +79,6 @@ void posordem(node *raiz){
 
 bool inserir(node **raizptr, int dado){ 
     node *raiz = *raizptr;
-
-    
-
     if (raiz == NULL){ 
         (*raizptr) = criarnode(dado); 
         return true; 
@@ -100,6 +97,55 @@ bool inserir(node **raizptr, int dado){
 
 }
 
+bool retirar(node **raizptr, int dado){
+    node *raiz = *raizptr;
+
+    if (raiz == NULL){
+        return false; 
+    }
+
+    if (dado < raiz->dado){
+        return retirar(&(raiz->esquerda), dado);
+
+    } else if (dado > raiz->dado){
+        return retirar(&(raiz->direita), dado);
+
+    } else {
+
+        if (raiz->esquerda == NULL){
+            *raizptr = raiz->direita;
+            free(raiz);
+
+        } else if (raiz->direita == NULL){
+            *raizptr = raiz->esquerda;
+            free(raiz);
+
+        } else {
+            node *paidosucessor = raiz;
+            node *sucessor = raiz->direita;
+
+            while (sucessor->esquerda != NULL){
+                paidosucessor = sucessor;
+                sucessor = sucessor->esquerda;
+            }
+
+            raiz->dado = sucessor->dado;
+
+            if (paidosucessor == raiz){
+                paidosucessor->direita = sucessor->direita;
+            } else {
+                paidosucessor->esquerda = sucessor->direita;
+            }
+
+            free(sucessor);
+        }
+
+        return true;
+    }
+}
+
+
+
 bool encontrar(node *raiz, int dado){
         if (raiz == NULL) return false;
         if (raiz->dado == dado){
@@ -110,6 +156,8 @@ bool encontrar(node *raiz, int dado){
             return encontrar(raiz->direita, dado); 
         }
 }
+
+
 
 void liberar(node *raiz){ 
     if (raiz == NULL){
@@ -135,7 +183,8 @@ int main(){
         printf("4 - exibir em pré-ordem\n");
         printf("5 - exibir em ordem\n");
         printf("6 - exibir em pós-ordem\n");
-        printf("7 - sair\n");
+        printf("7 - remover valor"\n);     
+        printf("8 - sair\n");
         printf("escolha: ");
         scanf("%d", &opcao);
 
@@ -177,6 +226,16 @@ int main(){
             break;
 
             case 7:
+               printf("digite o valor para retirar: ");
+               scanf("%d", &valor);
+               if (retirar(&raiz, valor)){
+               printf("valor removido com sucesso\n");
+               } else {
+               printf("valor não encontrado na árvore\n");
+               }
+            break;
+
+            case 8:
                 rodando = false;
                 printf("saindo da operação...\n");
             break;
